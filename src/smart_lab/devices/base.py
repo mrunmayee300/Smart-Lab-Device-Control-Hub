@@ -131,7 +131,10 @@ class SimulatedDevice(ABC):
             state=self.state,
             error_count=self.error_count,
             queue_depth=queue_depth,
-            details={"transport": self.bus.transport.value, "uptime_seconds": time.monotonic() - self._started_at},
+            details={
+                "transport": self.bus.transport.value,
+                "uptime_seconds": time.monotonic() - self._started_at,
+            },
         )
 
     @abstractmethod

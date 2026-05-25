@@ -55,6 +55,9 @@ target-version = "py312"
 select = ["E", "F", "I", "B", "UP", "ASYNC", "N"]
 ignore = ["B008"]
 
+[tool.ruff.lint.per-file-ignores]
+"src/smart_lab/grpc_server/server.py" = ["N802"]
+
 [tool.coverage.run]
 source = ["src/smart_lab"]
 branch = true

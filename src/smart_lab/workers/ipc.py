@@ -50,7 +50,9 @@ def read_shared_json(memory: shared_memory.SharedMemory) -> dict[str, Any]:
     return json.loads(bytes(memory.buf[4 : 4 + size]).decode("utf-8"))
 
 
-def send_socket_message(host: str, port: int, payload: dict[str, Any], timeout: float = 2.0) -> dict[str, Any]:
+def send_socket_message(
+    host: str, port: int, payload: dict[str, Any], timeout: float = 2.0
+) -> dict[str, Any]:
     data = json.dumps(payload).encode("utf-8")
     with socket.create_connection((host, port), timeout=timeout) as client:
         client.sendall(struct.pack("!I", len(data)) + data)

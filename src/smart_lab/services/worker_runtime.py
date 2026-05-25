@@ -2,9 +2,9 @@ import asyncio
 import contextlib
 from multiprocessing import Queue
 
+from smart_lab.services.device_manager import DeviceManager, device_manager
 from smart_lab.shared.config import get_settings
 from smart_lab.shared.event_bus import event_bus
-from smart_lab.services.device_manager import DeviceManager, device_manager
 from smart_lab.workers.cpu_worker import CpuWorkerPool
 from smart_lab.workers.ipc import IpcPrimitives, read_shared_json
 from smart_lab.workers.socket_status import ThreadedStatusSocket
@@ -32,7 +32,9 @@ class WorkerRuntime:
             settings.ipc_socket_host, settings.ipc_socket_port, self.snapshot
         )
         self.status_socket.start()
-        self._bridge_task = asyncio.create_task(self._bridge_telemetry(), name="worker-telemetry-bridge")
+        self._bridge_task = asyncio.create_task(
+            self._bridge_telemetry(), name="worker-telemetry-bridge"
+        )
 
     async def stop(self) -> None:
         if self._bridge_task:

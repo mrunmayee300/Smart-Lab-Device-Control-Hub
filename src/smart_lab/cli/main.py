@@ -26,19 +26,25 @@ def devices() -> None:
 
 @app.command("start-device")
 def start_device(device_id: str) -> None:
-    response = asyncio.run(_request("POST", f"/devices/{device_id}/commands", json={"command": "start"}))
+    response = asyncio.run(
+        _request("POST", f"/devices/{device_id}/commands", json={"command": "start"})
+    )
     typer.echo(response.json())
 
 
 @app.command("stop-device")
 def stop_device(device_id: str) -> None:
-    response = asyncio.run(_request("POST", f"/devices/{device_id}/commands", json={"command": "stop"}))
+    response = asyncio.run(
+        _request("POST", f"/devices/{device_id}/commands", json={"command": "stop"})
+    )
     typer.echo(response.json())
 
 
 @app.command("reset-device")
 def reset_device(device_id: str) -> None:
-    response = asyncio.run(_request("POST", f"/devices/{device_id}/commands", json={"command": "reset"}))
+    response = asyncio.run(
+        _request("POST", f"/devices/{device_id}/commands", json={"command": "reset"})
+    )
     typer.echo(response.json())
 
 

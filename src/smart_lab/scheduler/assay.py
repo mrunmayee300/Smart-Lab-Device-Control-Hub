@@ -24,7 +24,9 @@ def built_in_assays() -> dict[str, AssayDefinition]:
                     command="set_rate",
                     payload={"poll_interval_seconds": 0.25},
                 ),
-                AssayStep(step_id="start_pump", device_id="pump_1", command="start", delay_seconds=0.2),
+                AssayStep(
+                    step_id="start_pump", device_id="pump_1", command="start", delay_seconds=0.2
+                ),
                 AssayStep(step_id="read_spectrometer", device_id="spectrometer_1", command="start"),
                 AssayStep(step_id="voltage_guard", device_id="voltage_reader_1", command="start"),
             ],
@@ -57,7 +59,9 @@ class AssayScheduler:
         run = AssayRun(run_id=str(uuid4()), definition=definition)
         self.runs[run.run_id] = run
         async with AsyncSessionLocal() as session:
-            await Repository(session).create_assay_run(run.run_id, definition.assay_id, definition.name)
+            await Repository(session).create_assay_run(
+                run.run_id, definition.assay_id, definition.name
+            )
         task = asyncio.create_task(self._execute(run), name=f"assay-{run.run_id}")
         self._tasks[run.run_id] = task
         return run
@@ -70,7 +74,9 @@ class AssayScheduler:
         task.cancel()
         run.state = AssayRunState.CANCELLED
         async with AsyncSessionLocal() as session:
-            await Repository(session).update_assay_run(run_id, AssayRunState.CANCELLED, {"steps": run.results})
+            await Repository(session).update_assay_run(
+                run_id, AssayRunState.CANCELLED, {"steps": run.results}
+            )
         await self.bus.publish("assays", self.serialize_run(run))
         return True
 
@@ -79,7 +85,9 @@ class AssayScheduler:
         await self._persist_and_publish(run)
         try:
             if run.definition.concurrent:
-                await asyncio.gather(*(self._execute_step(run, step) for step in run.definition.steps))
+                await asyncio.gather(
+                    *(self._execute_step(run, step) for step in run.definition.steps)
+                )
             else:
                 for step in run.definition.steps:
                     await self._execute_step(run, step)
@@ -110,7 +118,11 @@ class AssayScheduler:
                     timeout=step.timeout_seconds,
                 )
                 run.results.append(
-                    {"step_id": step.step_id, "attempt": attempt + 1, "result": result.model_dump(mode="json")}
+                    {
+                        "step_id": step.step_id,
+                        "attempt": attempt + 1,
+                        "result": result.model_dump(mode="json"),
+                    }
                 )
                 if result.accepted:
                     await self._persist_and_publish(run)
@@ -123,7 +135,9 @@ class AssayScheduler:
 
     async def _persist_and_publish(self, run: AssayRun) -> None:
         async with AsyncSessionLocal() as session:
-            await Repository(session).update_assay_run(run.run_id, run.state, {"steps": run.results})
+            await Repository(session).update_assay_run(
+                run.run_id, run.state, {"steps": run.results}
+            )
         await self.bus.publish("assays", self.serialize_run(run))
 
     @staticmethod

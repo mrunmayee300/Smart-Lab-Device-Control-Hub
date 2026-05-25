@@ -14,7 +14,9 @@ if str(GENERATED_DIR) not in sys.path:
 try:
     import smart_lab_pb2_grpc
 except ImportError as exc:  # pragma: no cover
-    raise RuntimeError("Generate protobuf stubs with `make proto` before using gRPC CLI calls") from exc
+    raise RuntimeError(
+        "Generate protobuf stubs with `make proto` before using gRPC CLI calls"
+    ) from exc
 
 
 async def list_devices_grpc() -> list[dict]:

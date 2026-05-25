@@ -39,7 +39,9 @@ class DeviceService(smart_lab_pb2_grpc.DeviceServiceServicer):
             ]
         )
 
-    async def GetDeviceHealth(self, request: smart_lab_pb2.DeviceId, context) -> smart_lab_pb2.CommandResponse:
+    async def GetDeviceHealth(
+        self, request: smart_lab_pb2.DeviceId, context
+    ) -> smart_lab_pb2.CommandResponse:
         for health in device_manager.health():
             if health.device_id == request.device_id:
                 return smart_lab_pb2.CommandResponse(
@@ -49,12 +51,17 @@ class DeviceService(smart_lab_pb2_grpc.DeviceServiceServicer):
                     message=health.model_dump_json(),
                 )
         return smart_lab_pb2.CommandResponse(
-            command_id="health", device_id=request.device_id, accepted=False, message="unknown device"
+            command_id="health",
+            device_id=request.device_id,
+            accepted=False,
+            message="unknown device",
         )
 
 
 class CommandService(smart_lab_pb2_grpc.CommandServiceServicer):
-    async def Execute(self, request: smart_lab_pb2.CommandRequest, context) -> smart_lab_pb2.CommandResponse:
+    async def Execute(
+        self, request: smart_lab_pb2.CommandRequest, context
+    ) -> smart_lab_pb2.CommandResponse:
         result = await device_manager.command(
             request.device_id,
             CommandType(request.command),

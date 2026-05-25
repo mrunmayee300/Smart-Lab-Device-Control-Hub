@@ -49,7 +49,9 @@ class Repository:
         await self.session.commit()
         return record
 
-    async def latest_telemetry(self, device_id: str | None = None, limit: int = 100) -> list[TelemetryRecord]:
+    async def latest_telemetry(
+        self, device_id: str | None = None, limit: int = 100
+    ) -> list[TelemetryRecord]:
         statement = select(TelemetryRecord).order_by(desc(TelemetryRecord.created_at)).limit(limit)
         if device_id:
             statement = statement.where(TelemetryRecord.device_id == device_id)
@@ -57,11 +59,15 @@ class Repository:
         return list(result.scalars())
 
     async def append_log(self, component: str, level: str, message: str, **context: object) -> None:
-        self.session.add(LogRecord(component=component, level=level, message=message, context=context))
+        self.session.add(
+            LogRecord(component=component, level=level, message=message, context=context)
+        )
         await self.session.commit()
 
     async def list_logs(self, limit: int = 100) -> list[LogRecord]:
-        result = await self.session.execute(select(LogRecord).order_by(desc(LogRecord.created_at)).limit(limit))
+        result = await self.session.execute(
+            select(LogRecord).order_by(desc(LogRecord.created_at)).limit(limit)
+        )
         return list(result.scalars())
 
     async def create_assay_run(self, run_id: str, assay_id: str, name: str) -> None:
@@ -101,5 +107,7 @@ class Repository:
         return list(result.scalars())
 
     async def append_worker_event(self, worker_id: str, event_type: str, **details: object) -> None:
-        self.session.add(WorkerEventRecord(worker_id=worker_id, event_type=event_type, details=details))
+        self.session.add(
+            WorkerEventRecord(worker_id=worker_id, event_type=event_type, details=details)
+        )
         await self.session.commit()

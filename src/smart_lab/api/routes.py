@@ -42,7 +42,9 @@ async def device_health() -> list[dict]:
 async def execute_command(device_id: str, payload: CommandRequest, request: Request) -> dict:
     key = request.client.host if request.client else "unknown"
     if not rate_limiter.allow(key):
-        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="command rate limit exceeded")
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="command rate limit exceeded"
+        )
     result = await device_manager.command(
         device_id=device_id,
         command=payload.command,
@@ -114,7 +116,9 @@ async def cancel_assay(run_id: str) -> dict:
 
 
 @router.get("/assays/history")
-async def assay_history(limit: int = 100, session: AsyncSession = Depends(get_session)) -> list[dict]:
+async def assay_history(
+    limit: int = 100, session: AsyncSession = Depends(get_session)
+) -> list[dict]:
     rows = await Repository(session).list_assay_runs(limit=min(limit, 1000))
     return [
         {

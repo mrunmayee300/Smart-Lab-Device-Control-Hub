@@ -35,4 +35,6 @@ class TelemetryIngestService:
                 async with AsyncSessionLocal() as session:
                     await Repository(session).save_telemetry(telemetry)
             except Exception:
-                logger.exception("failed to persist telemetry", extra={"device_id": telemetry.device_id})
+                logger.exception(
+                    "failed to persist telemetry", extra={"device_id": telemetry.device_id}
+                )

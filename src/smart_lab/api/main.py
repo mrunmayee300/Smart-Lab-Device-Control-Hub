@@ -38,7 +38,10 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.app_name,
         version="0.1.0",
-        description="Real-time laboratory device orchestration backend with asyncio, IPC, WebSockets, and gRPC.",
+        description=(
+            "Real-time laboratory device orchestration backend with asyncio, "
+            "IPC, WebSockets, and gRPC."
+        ),
         lifespan=lifespan,
     )
     app.add_middleware(

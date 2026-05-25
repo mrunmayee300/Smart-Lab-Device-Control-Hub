@@ -29,7 +29,9 @@ class DeviceManager:
         self._command_lock = asyncio.Lock()
         self.bus = bus or event_bus
 
-    async def discover_and_register(self, session: AsyncSession | None = None) -> list[DeviceConfig]:
+    async def discover_and_register(
+        self, session: AsyncSession | None = None
+    ) -> list[DeviceConfig]:
         configs = discover_devices()
         for config in configs:
             self.register(config)
@@ -101,7 +103,9 @@ class DeviceManager:
         task = self._poll_tasks.get(device_id)
         if task and not task.done():
             return
-        self._poll_tasks[device_id] = asyncio.create_task(self._poll_device(device_id), name=f"poll-{device_id}")
+        self._poll_tasks[device_id] = asyncio.create_task(
+            self._poll_device(device_id), name=f"poll-{device_id}"
+        )
 
     async def _cancel_polling(self, device_id: str) -> None:
         task = self._poll_tasks.pop(device_id, None)

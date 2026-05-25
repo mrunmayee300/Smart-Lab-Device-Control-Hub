@@ -1,7 +1,13 @@
 import pytest
 
 from smart_lab.devices.registry import build_device
-from smart_lab.shared.models import CommandType, DeviceCommand, DeviceConfig, DeviceType, TransportType
+from smart_lab.shared.models import (
+    CommandType,
+    DeviceCommand,
+    DeviceConfig,
+    DeviceType,
+    TransportType,
+)
 
 
 @pytest.mark.asyncio

@@ -2,7 +2,6 @@ import json
 import socketserver
 import struct
 import threading
-from typing import Any
 
 
 class StatusHandler(socketserver.BaseRequestHandler):
@@ -24,10 +23,14 @@ class ThreadedStatusSocket:
     def __init__(self, host: str, port: int, state_provider) -> None:
         self.host = host
         self.port = port
-        handler = type("BoundStatusHandler", (StatusHandler,), {"state_provider": staticmethod(state_provider)})
+        handler = type(
+            "BoundStatusHandler", (StatusHandler,), {"state_provider": staticmethod(state_provider)}
+        )
         self.server = socketserver.ThreadingTCPServer((host, port), handler)
         self.server.daemon_threads = True
-        self._thread = threading.Thread(target=self.server.serve_forever, name="status-socket", daemon=True)
+        self._thread = threading.Thread(
+            target=self.server.serve_forever, name="status-socket", daemon=True
+        )
 
     def start(self) -> None:
         self._thread.start()

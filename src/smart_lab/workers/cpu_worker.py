@@ -69,7 +69,9 @@ def cpu_worker_main(
 
 
 class CpuWorkerPool:
-    def __init__(self, telemetry_queue: Queue, result_queue: Queue, shared_name: str, count: int) -> None:
+    def __init__(
+        self, telemetry_queue: Queue, result_queue: Queue, shared_name: str, count: int
+    ) -> None:
         self.telemetry_queue = telemetry_queue
         self.result_queue = result_queue
         self.shared_name = shared_name
