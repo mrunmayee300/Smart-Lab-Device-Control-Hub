@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     max_command_rate_per_minute: int = 120
     worker_heartbeat_seconds: float = 2.0
     cpu_worker_count: int = Field(default=2, ge=1)
+    enable_worker_runtime: bool = True
     ipc_socket_host: str = "127.0.0.1"
     ipc_socket_port: int = 9100
     state_dir: Path = Path("./runtime")

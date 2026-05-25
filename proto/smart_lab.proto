@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package smartlab.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message Device {
+  string device_id = 1;
+  string device_type = 2;
+  string transport = 3;
+  bool enabled = 4;
+}
+
+message DeviceList {
+  repeated Device devices = 1;
+}
+
+message CommandRequest {
+  string command_id = 1;
+  string device_id = 2;
+  string command = 3;
+  int32 priority = 4;
+  map<string, string> payload = 5;
+}
+
+message CommandResponse {
+  string command_id = 1;
+  string device_id = 2;
+  bool accepted = 3;
+  string message = 4;
+}
+
+message TelemetryEvent {
+  string device_id = 1;
+  string device_type = 2;
+  string metric = 3;
+  double value = 4;
+  string unit = 5;
+  double quality = 6;
+  int64 sequence = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+message DeviceId {
+  string device_id = 1;
+}
+
+service DeviceService {
+  rpc ListDevices(google.protobuf.Empty) returns (DeviceList);
+  rpc GetDeviceHealth(DeviceId) returns (CommandResponse);
+}
+
+service CommandService {
+  rpc Execute(CommandRequest) returns (CommandResponse);
+}
+
+service TelemetryService {
+  rpc StreamTelemetry(google.protobuf.Empty) returns (stream TelemetryEvent);
+}

@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+*.db
+runtime/
+.env
+src/smart_lab/grpc_generated/*_pb2.py
+src/smart_lab/grpc_generated/*_pb2_grpc.py
